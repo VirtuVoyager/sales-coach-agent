@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "app.main:app",
+                "--reload",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000"
+            ],
+            "jinja": true,
+            "justMyCode": false
+        },
+        {
+            "name": "Debug Chainlit UI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "chainlit",
+            "args": [
+                "run",
+                "ui/app.py",
+                "-w",
+                "--port",
+                "8001"
+            ],
+            "justMyCode": false
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run Full Stack",
+            "configurations": ["Debug FastAPI", "Debug Chainlit UI"]
+        }
+    ]
+}
