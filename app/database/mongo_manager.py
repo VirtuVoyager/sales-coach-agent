@@ -3,6 +3,7 @@ import certifi
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
+from opik import track
 
 class MongoManager:
     """
@@ -20,7 +21,8 @@ class MongoManager:
     def get_collection(self, collection_name: str) -> Collection[dict[str, Any]]:
         """Utility to fetch a specific collection."""
         return self.db[collection_name]
-        
+
+    @track(name="Retrieve Customer Memory")    
     def get_customer_memory(self, customer_id: str) -> dict[str, Any] | None:
         """
         Retrieves historical insights and long-term memory for a specific customer.
@@ -29,7 +31,8 @@ class MongoManager:
         collection = self.get_collection("customer_memory")
         # Exclude the MongoDB '_id' ObjectId to keep the dictionary JSON serializable
         return collection.find_one({"customer_id": customer_id}, {"_id": 0})
-        
+    
+    @track(name="Update Customer Memory")    
     def update_customer_memory(self, customer_id: str, new_data: dict[str, Any]) -> None:
         """
         Upserts new memory points into the customer's long-term storage.

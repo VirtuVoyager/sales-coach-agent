@@ -1,6 +1,8 @@
 from typing import Any
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, MessagesPlaceholder
+from opik import track
 
+@track(name="Generate Customer Prompt")
 def get_customer_prompt(session_metadata: dict[str, Any] | None = None) -> ChatPromptTemplate:
     """
     Dynamically generates the Customer Agent prompt.

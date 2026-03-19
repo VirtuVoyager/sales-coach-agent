@@ -24,6 +24,7 @@ dependencies = [
     "httpx>=0.28.1",
     "langchain-groq>=1.1.2",
     "certifi>=2026.2.25",
+    "opik>=1.10.44",
 ]
 
 [tool.uv]
