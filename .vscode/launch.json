@@ -15,7 +15,8 @@
                 "8000"
             ],
             "jinja": true,
-            "justMyCode": false
+            "justMyCode": false,
+            "preLaunchTask": "Start Opik Docker"
         },
         {
             "name": "Debug Chainlit UI",

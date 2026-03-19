@@ -208,3 +208,6 @@ __marimo__/
 .chainlit/translations/
 data/sample_docs/
 data/faiss_index/
+
+# Local Opik Deployment
+opik-local/

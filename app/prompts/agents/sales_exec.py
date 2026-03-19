@@ -1,6 +1,8 @@
 from typing import Any
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, MessagesPlaceholder
+from opik import track
 
+@track(name="Generate Orchestrator Prompt")
 def get_sales_exec_prompt(
     retrieved_context: list[str], 
     memory: dict[str, Any] | None = None

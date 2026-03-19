@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Opik Docker",
+            "type": "shell",
+            "command": "if [ ! -d './opik-local' ]; then git clone https://github.com/comet-ml/opik.git ./opik-local; fi && cd ./opik-local && ./opik.sh",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

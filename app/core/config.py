@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     mongodb_uri: str = "mongodb://localhost:27017/"
     mongodb_db_name: str = "sales_simulator_db"
 
+    # Opik Observability (Optional so the app doesn't crash if Opik is down)
+    opik_url_override: str | None = "http://localhost:5173/api"
+    opik_workspace: str = "default"
+    opik_project_name: str = "sales-simulator"
+
     model_config = SettingsConfigDict(
         env_file=".env", 
         env_file_encoding="utf-8", 

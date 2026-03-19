@@ -1,6 +1,8 @@
 from typing import Any
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, MessagesPlaceholder
+from opik import track
 
+@track(name="Generate Orchestrator Prompt")
 def get_orchestrator_prompt(session_metadata: dict[str, Any] | None = None) -> ChatPromptTemplate:
     scenario = session_metadata.get("scenario", "a general B2B sales call") if session_metadata else "a general B2B sales call"
     
