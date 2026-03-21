@@ -9,6 +9,7 @@ from app.agents.orchestrator.graph import SimulationOrchestrator
 from app.database.checkpointer import get_checkpointer
 from opik.integrations.langchain import OpikTracer
 from opik import track
+from opik import Opik
 
 router = APIRouter(prefix="/api/v1", tags=["Simulation"])
 
@@ -97,6 +98,37 @@ async def chat_endpoint(request: ChatRequest, api_request: Request):
             messages=formatted_messages,
             next_agent=final_state.get("next_agent", "unknown")
         )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+class FeedbackRequest(BaseModel):
+    """Payload for human evaluation scores."""
+    session_id: str
+    value: float = Field(..., description="1.0 for positive, 0.0 for negative")
+    comment: str | None = Field(None, description="Optional text feedback from the user")
+
+@router.post("/feedback")
+async def feedback_endpoint(request: FeedbackRequest):
+    """
+    Receives human feedback from the UI and logs it into Opik.
+    """
+    try:
+        # Initialize the Opik client
+        client = Opik(project_name=settings.opik_project_name)
+        
+        # Log a dedicated feedback trace. 
+        # By including the session_id in the metadata, you can easily filter
+        # your Opik dashboard to see the exact conversation that led to this score.
+        client.trace(
+            name="Human Evaluation",
+            input={"session_id": request.session_id},
+            output={"score": request.value, "comment": request.comment},
+            tags=["human_feedback"],
+            metadata={"session_id": request.session_id}
+        )
+        
+        return {"status": "Feedback logged successfully"}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

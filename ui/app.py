@@ -74,3 +74,34 @@ async def on_message(message: cl.Message):
         except httpx.HTTPError as e:
             msg.content = f"⚠️ Error communicating with the backend API: {str(e)}"
             await msg.update()
+
+@cl.on_feedback
+async def on_feedback(feedback):
+    """
+    Triggered when the user clicks the thumbs up/down button on an AI message.
+    """
+    session_id = cl.user_session.get("session_id")
+    
+    # Chainlit feedback.value is usually 1 (up) or 0 (down)
+    score = 1.0 if feedback.value == 1 else 0.0
+    
+    payload = {
+        "session_id": session_id,
+        "value": score,
+        "comment": feedback.comment
+    }
+    
+    # Fire and forget the feedback to the backend
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        try:
+            response = await client.post(
+                "http://localhost:8000/api/v1/feedback", 
+                json=payload
+            )
+            response.raise_for_status()
+            
+            # Optionally acknowledge the feedback in the UI
+            await cl.Message(content="*Thank you for the feedback! It has been logged to Opik.*").send()
+            
+        except httpx.HTTPError as e:
+            print(f"Failed to submit feedback: {e}")
