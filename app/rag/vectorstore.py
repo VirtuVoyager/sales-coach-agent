@@ -38,8 +38,14 @@ def load_vector_store() -> FAISS:
     """
     embeddings = get_embedding_model()
     
-    if not INDEX_PATH.exists():
-        raise FileNotFoundError(f"No FAISS index found at {INDEX_PATH}. Please run build_and_save_index() first.")
+    # Check if the directory exists and contains at least one .faiss file
+    if not INDEX_PATH.exists() or not list(INDEX_PATH.glob("*.faiss")):
+        print(f"No .faiss files found in {INDEX_PATH}. Building index first...")
+        vector_store = build_and_save_index()
+        if vector_store is not None:
+            return vector_store
+        else:
+            raise FileNotFoundError(f"No FAISS index found at {INDEX_PATH} and no documents available to build one.")
         
     # allow_dangerous_deserialization is required in recent LangChain updates when loading local pickle files
     return FAISS.load_local(str(INDEX_PATH), embeddings, allow_dangerous_deserialization=True)
