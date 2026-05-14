@@ -43,5 +43,3 @@ python_files = ["test_*.py", "eval_*.py"]
 markers = [
     "eval: prompt evaluation tests — require RUN_EVALS=1 and a live LLM",
 ]
-# Separate unit/integration from evals by default
-addopts = "-m 'not eval'"
